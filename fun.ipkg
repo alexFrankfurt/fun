@@ -1,0 +1,10 @@
+package fun
+
+opts = "-p effects"
+
+modules = Cast,
+	  Exer,
+	  Model,
+	  Practice,
+	  Main,
+	  Synt
