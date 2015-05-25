@@ -16,4 +16,3 @@ vdrop (S k) (x::xs) = vdrop k xs
 
 Matrix : Type -> Nat -> Nat -> Type
 Matrix a n m = Vect n $ Vect m a
-

@@ -32,4 +32,4 @@ printf : (s : String) -> interpFormat $ formatString s
 printf s =  toFunction (formatString s) ""
 
 res0 : Num a => Maybe a
-res0 = Just 10 <+> Just 2 
+res0 = (<+>) (Just 10)  (Just 2) 
