@@ -6,9 +6,10 @@ import Effect.State
 import Effect.StdIO
 import Control.IOExcept
 
+data Count : Type where
+
 FileIO : Type -> Type -> Type
-FileIO st t
-  = Eff t [FILE_IO st, STDIO, STATE Int]
+FileIO st t = Eff t [FILE_IO st, STDIO, Count ::: STATE Int]
 
 readFile : FileIO (OpenFile Read) (List String)
 readFile = readAcc [] where
@@ -16,21 +17,15 @@ readFile = readAcc [] where
     readAcc acc = do e <- eof
                      if (not e)
                         then do str <- readLine
-                                put (!get + 1)
+                                Count :- put (!(Count :- get) + 1)
                                 readAcc (str :: acc)
                         else return (reverse acc)
 
-dumpFile : String -> FileIO () ()
-dumpFile fname = do ok <- open fname Read
-                    toEff [FILE_IO _, _, _] $ 
-                     case ok of
-                       True => do num <- get
-                                  putStrLn (show !get ++ "\n" ++
-                                            show !readFile)
-                                  close
-                       False => putStrLn ("Error!")
-                    putStrLn "DONE!"
-                    return ()
+testFile : FileIO () ()
+testFile = do True <- open "effectsInput" Read | False => putStrLn "Error!"
+              putStrLn (show !readFile)
+              close
+              putStrLn (show !(Count :- get))
 
 main : IO ()
-main = run $ dumpFile "testfile"
+main = run testFile 

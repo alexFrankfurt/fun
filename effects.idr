@@ -12,5 +12,6 @@ communicate = do putStr "Enter: "
                    _     => do putStrLn str
                                communicate
 
+
 main : IO ()
 main = run communicate            
