@@ -4,10 +4,28 @@ import Effects
 import Effect.State
 import Effect.StdIO
 
+-- analog of `effinc` but with labeled state
+lbldeff : { ['Lbl ::: STATE Int] } Eff Int
+lbldeff = do x <- 'Lbl :- get
+             'Lbl :- put (x + 1)
+             pure !('Lbl :- get)
+
 effinc : { [STATE Int] } Eff Int
 effinc = do i' <- get
             put (i' + 1)
             pure !get
+
+-- appends to a vector if given word begins with 'a'
+-- todo
+-- vectorStore : String -> 
+--               { [STATE (Vect n String)] ==>
+--               {ok} if ok then [STATE (Vect (S n) String)]
+--                          else [STATE (Vect n String)] } Eff Bool
+-- vectorStore s = do case strHead s of
+--                         'a' => do putM (s :: !get)
+--                                   pure True
+--                         _   => pure False
+                   
 
 flow : { [STDIO, STATE Int] } Eff ()
 flow = do putStrLn "I begin working..."
@@ -17,7 +35,8 @@ flow = do putStrLn "I begin working..."
           -- because of default int value 0
           -- second one leads to result of 2
 --          i <- effinc
-          let i = runPureInit [1] effinc
+--          let i = runPureInit [1] effinc
+          let i = runPureInit ['Lbl := 10] lbldeff
           putStrLn $ cast i
           putStrLn "I've done with work"
           
