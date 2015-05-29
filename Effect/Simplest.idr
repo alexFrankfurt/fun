@@ -15,6 +15,19 @@ effinc = do i' <- get
             put (i' + 1)
             pure !get
 
+
+
+-- readInt : { [STATE (Vect n Int), STDIO] ==>
+--             {ok} if ok then [STATE (Vect (S n) Int), STDIO]
+--                        else [STATE (Vect n Int), STDIO] } Eff Bool
+-- readInt = do let x = trim !getStr
+--              case all isDigit (unpack x) of
+--                   False => pure False
+--                   True  => do putM (cast x :: !get)
+--                               pure True
+
+
+
 -- appends to a vector if given word begins with 'a'
 -- todo
 -- vectorStore : String -> 
@@ -26,6 +39,9 @@ effinc = do i' <- get
 --                                   pure True
 --                         _   => pure False
                    
+
+
+
 
 flow : { [STDIO, STATE Int] } Eff ()
 flow = do putStrLn "I begin working..."
