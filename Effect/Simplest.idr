@@ -15,34 +15,30 @@ effinc = do i' <- get
             put (i' + 1)
             pure !get
 
-
-
--- readInt : { [STATE (Vect n Int), STDIO] ==>
---             {ok} if ok then [STATE (Vect (S n) Int), STDIO]
---                        else [STATE (Vect n Int), STDIO] } Eff Bool
--- readInt = do let x = trim !getStr
---              case all isDigit (unpack x) of
---                   False => pure False
---                   True  => do putM (cast x :: !get)
---                               pure True
-
-
-
 -- appends to a vector if given word begins with 'a'
 -- todo
--- vectorStore : String -> 
---               { [STATE (Vect n String)] ==>
---               {ok} if ok then [STATE (Vect (S n) String)]
---                          else [STATE (Vect n String)] } Eff Bool
--- vectorStore s = do case strHead s of
---                         'a' => do putM (s :: !get)
---                                   pure True
---                         _   => pure False
+vectorStore : String -> 
+              { [STATE (Vect n String)] ==>
+              {ok} if ok then [STATE (Vect (S n) String)]
+                         else [STATE (Vect n String)] } Eff Bool
+vectorStore s = do case strHead s of
+                        'a' => do putM (s :: !get)
+                                  pureM True
+                        _   => pureM False
                    
+-- make flow: 
+--   user enters string
+--   we may be prepend it to a vector
+--   user can 'ask' us for stored strings with "ask" word
+--   and terminate session with "bye" word                   
+-- vecFlow : { [STATE (Vect n String), STDIO] ==>
+--               {ok} if ok then [STATE (Vect (S n) String), STDIO]
+--                          else [STATE (Vect n String), STDIO ] } Eff ()
+-- vecFlow = do put []
+--              vectorStore !getStr
+--              vecFlow
 
-
-
-
+                                      
 flow : { [STDIO, STATE Int] } Eff ()
 flow = do putStrLn "I begin working..."
           putStrLn $ cast 10
