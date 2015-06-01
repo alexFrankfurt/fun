@@ -1,4 +1,4 @@
-module Main
+module Two
 
 foo : List Int -> List Int
 foo xs = if List.length xs < 4

@@ -1,4 +1,4 @@
-module Main
+module Simple
 
 import Effects
 import Effect.File

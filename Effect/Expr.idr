@@ -1,4 +1,4 @@
-module Main
+module Expr
 
 import Prelude.Show
 import Effects

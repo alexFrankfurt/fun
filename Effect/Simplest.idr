@@ -5,8 +5,6 @@ import Effect.State
 import Effect.StdIO
 
 -- analog of `effinc` but with labeled state
-
-
 lbldeff : { ['Lbl ::: STATE Int] } Eff Int
 lbldeff = do x <- 'Lbl :- get
              'Lbl :- put (x + 1)

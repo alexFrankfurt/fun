@@ -1,4 +1,4 @@
-module Main
+module Counter
 
 import Effects
 import Effect.File

@@ -2,9 +2,21 @@ package fun
 
 opts = "-p effects"
 
-modules = Cast,
-	  Exer,
-	  Model,
-	  Practice,
-	  Main,
-	  Synt
+modules = Cast
+	, Exer
+	, Model
+	, Door
+	, Printf
+	, Syntax
+	, Tests
+	, Two
+	  
+	, Effect.Simplest
+	, Effect.Counter
+	, Effect.Door
+	, Effect.StringRecorder
+	, Effect.GuessNumber
+	, Effect.Simple
+	, Effect.File
+	, Effect.Effects
+	, Effect.Exprc
