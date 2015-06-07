@@ -77,3 +77,20 @@ res3 = tdl2 `relate` tdp2
 
 res : (Relation, Relation, Relation, Relation)
 res = (res0, res1, res2, res3)
+
+-- for a while it's good solution for
+-- relation problem
+class Relater a b where
+  relater : a -> b -> Relation
+  
+instance Relater Point Line where 
+  relater (MkPoint x y) (MkLine p1 p2) = Rel1
+  
+instance Relater Point Point where
+  relater (MkPoint x y) (MkPoint z w) = Rel2
+  
+res4 : Relation
+res4 = relater tdp1 tdp2
+
+res5 : Relation
+res5 = relater tdp1 tdl2
