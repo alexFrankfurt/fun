@@ -10,6 +10,7 @@ modules = Cast
 	, Syntax
 	, Tests
 	, Two
+	, NamedInstance
 	  
 	, Effect.Simplest
 	, Effect.Counter
@@ -20,3 +21,4 @@ modules = Cast
 	, Effect.File
 	, Effect.Effects
 	, Effect.Exprc
+	, Effect.NTimes
