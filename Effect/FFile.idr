@@ -6,7 +6,7 @@ import Effect.State
 import Effect.StdIO
 import Control.IOExcept
 
-data Count n : Type where
+data Count n
 
 FileIO : Type -> Type -> Type
 FileIO st t = Eff t [FILE_IO st, STDIO, Count ::: STATE Int]

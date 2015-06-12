@@ -18,7 +18,7 @@ modules = Cast
 	, Effect.StringRecorder
 	, Effect.GuessNumber
 	, Effect.Simple
-	, Effect.File
-	, Effect.Effects
+	, Effect.FFile
+	, Effect.EEffects
 	, Effect.Exprc
 	, Effect.NTimes
