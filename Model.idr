@@ -94,3 +94,7 @@ res4 = relater tdp1 tdp2
 
 res5 : Relation
 res5 = relater tdp1 tdl2
+
+data File
+
+data Directory
