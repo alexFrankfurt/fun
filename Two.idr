@@ -23,5 +23,3 @@ Main.case_one = proof
   intro xs
   refine List.reverse
   exact xs
-
-
