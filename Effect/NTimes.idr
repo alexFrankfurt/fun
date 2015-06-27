@@ -4,7 +4,7 @@ import Effects
 import Effect.StdIO
 import Effect.File
 
-hello : Eff () [STDIO] 
+hello : Eff () [STDIO]
 hello = do putStr "Enter your name "
            x <- getStr
            putStrLn ("Hello, " ++ trim x ++ "!")
@@ -39,11 +39,11 @@ manyTimes n = if n == Z
 writeNTS : Nat -> String -> { [FILE_IO (OpenFile Write), STDIO] } Eff ()
 writeNTS n s = case n of
                     Z => do return ()
-                    _ => do writeLine "fjklds"
+                    _ => do writeLine s
                             writeNTS (n - 1) s
                   
 openAndBegin : { [FILE_IO (), STDIO] } Eff ()
-openAndBegin = do True <- open "out" Write | False => putStrLn "Error!"
+openAndBegin = do True <- open "outh" Write | False => putStrLn "Error!"
                   putStrLn "File opened!"
                   writeNTS 10 "jfkd"
                   close
