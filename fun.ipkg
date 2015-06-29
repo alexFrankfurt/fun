@@ -22,3 +22,9 @@ modules = Cast
 	, Effect.EEffects
 	, Effect.Exprc
 	, Effect.NTimes
+
+	, Ibt.Main
+
+executable = ibt
+
+main = Ibt.Main
