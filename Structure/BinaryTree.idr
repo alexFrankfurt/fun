@@ -81,3 +81,34 @@ rotateLeft x (Node y z w s) with (x == y)
                                      EmptyTree => Node y z w s
                                      (Node ry rz rw rs) => Node ry rz (Node y z w rw) rs
                                 else Node y z w $ rotateLeft x $ Node y z w s
+
+elemWidth : Nat
+elemWidth = 2
+
+width : BinaryTree a b -> Nat
+width EmptyTree = Z
+width (Node x y z w) = width z + elemWidth + width w
+
+times : String -> Nat -> String
+times s Z = ""
+times s (S k) = s ++ times s k
+
+-- pprint : Show a => BinaryTree a b -> String
+-- pprint EmptyTree = ""
+-- pprint (Node x y z w) 
+--   = --with String (++)
+--       with String (++)
+--          (with String (++) 
+--                 (with String (++) (" " `times` width z) $ show x)
+--                 (" " `times` width w))
+--          "\n"
+      
+rec : Nat -> IO ()
+rec Z = pure ()
+rec (S k) = do putStrLn $ show $ S k
+               rec k
+
+pprint : BinaryTree a b -> IO ()
+
+main : IO ()
+main = rec 8-- print $ show $ pprint dataValue
