@@ -1,5 +1,6 @@
 module Effect.Simplest
 
+import Data.Vect
 import Effects
 import Effect.State
 import Effect.StdIO
@@ -18,9 +19,9 @@ effinc = do i' <- get
 -- appends to a vector if given word begins with 'a'
 -- todo
 vectorStore : String -> 
-              { [STATE (Vect n String)] ==>
-              {ok} if ok then [STATE (Vect (S n) String)]
-                         else [STATE (Vect n String)] } Eff Bool
+              with DepEff Eff Bool [STATE (Vect n String)]
+              (\ok => if ok then [STATE (Vect (S n) String)]
+                            else [STATE (Vect n String)])
 vectorStore s = do case strHead s of
                         'a' => do putM (s :: !get)
                                   pureM True
@@ -53,4 +54,7 @@ flow = do putStrLn "I begin working..."
           putStrLn "I've done with work"
           
 main : IO ()
-main = run flow
+main = do --putM ("Hi!" :: !get)
+          putStrLn "Enter word, begining with a:"
+          word <- getStr
+          putStrLn word

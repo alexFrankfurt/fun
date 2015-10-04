@@ -25,6 +25,8 @@ modules = Cast
 
 	, Ibt.Main
 
+	, Structure.BinaryTree
+
 executable = ibt
 
 main = Ibt.Main
