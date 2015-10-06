@@ -50,8 +50,12 @@ t2 = Node 77 3 t0 EmptyTree
 t3 : BinaryTree Integer Double
 t3 = Node 60 3 t1 t2
 
+t4 : BinaryTree Integer Double
+t4 = Node 28 8.18 (Leaf 17 3.3)
+                  (Leaf 44 22.1)
+
 dataValue : BinaryTree Integer Double
-dataValue = Node 50 9.0 (Node 28 1 EmptyTree EmptyTree)
+dataValue = Node 50 9.0 t4
                         t3
 
 find : Ord a => a -> BinaryTree a b -> Maybe b
@@ -158,7 +162,7 @@ testrotateleft : Integer -> BinaryTree Integer Double -> BinaryTree Integer Doub
 testrotateleft = rotateLeft
 
 
-onlyEmpty : Vect n $ BinaryTree a b -> Bool
+onlyEmpty : List $ BinaryTree a b -> Bool
 onlyEmpty ts = foldl check True ts
   where 
     check : Bool -> BinaryTree a b -> Bool
@@ -166,19 +170,15 @@ onlyEmpty ts = foldl check True ts
     check True  EmptyTree      = True
     check True  (Node _ _ _ _) = False
     
-total
-plus_commutes_S : (k : Nat) -> (m : Nat) -> S (plus m k) = plus m (S k)
-plus_commutes_S k Z = Refl
-plus_commutes_S k (S j) = rewrite plus_commutes_S k j in Refl    
-    
 
 rowPrinter : Show a
-          => Vect n $ BinaryTree a b 
-          -> Vect (S n) $ BinaryTree a b 
-          -> Eff (Vect (n + (S n)) $ BinaryTree a b, Vect (2 * (S n)) $ BinaryTree a b) [STDIO]
+          => List $ BinaryTree a b 
+          -> List $ BinaryTree a b 
+          -> Eff (List $ BinaryTree a b, List $ BinaryTree a b) [STDIO]
 rowPrinter []      (lc::[]) 
   = case lc of
-         EmptyTree => do pure ([EmptyTree], [EmptyTree, EmptyTree])
+         EmptyTree => do putStrLn ""
+                         pure ([EmptyTree], [EmptyTree, EmptyTree])
          Node k d l r => 
            do putStr $ " " `times` width l
               putStr $ show k
@@ -186,44 +186,49 @@ rowPrinter []      (lc::[])
               pure ([lc], [l, r])
 rowPrinter (p::ps) (c::cs) 
   = case p of
-         EmptyTree => ?rhs
-         Node _ _ _ _ =>
+         EmptyTree => do (nps, ncs) <- rowPrinter ps cs
+                         pure (EmptyTree::EmptyTree::nps, EmptyTree::EmptyTree::ncs)
+         f @ (Node _ _ _ _) =>
            case c of
-             EmptyTree => ?rhs1
+             EmptyTree => do putStr $ " " `times` elemWidth
+                             (nps, ncs) <- rowPrinter ps cs
+                             pure (EmptyTree::f::nps, EmptyTree::EmptyTree::ncs)
              Node k d l r =>
                do putStr $ " " `times` width l
                   putStr $ show k
                   putStr $ " " `times` width r
+                  putStr $ " " `times` elemWidth
                   (nps, ncs) <- rowPrinter ps cs
-                  pure (c::nps, l::r::ncs)
+                  pure (c::f::nps, l::r::ncs)
              
 
 
 recPrinter : Show a => 
     Eff Bool [STDIO, 
-             'Prevs ::: STATE (Vect n (BinaryTree a b)),
-             'Curs ::: STATE (Vect (S n) (BinaryTree a b))]
+             'Prevs ::: STATE (List $ BinaryTree a b),
+             'Curs ::: STATE (List $ BinaryTree a b)]
              (\ok => if ok then [STDIO,
-                                'Prevs ::: STATE (Vect (n + (S n)) (BinaryTree a b)),
-                                'Curs ::: STATE (Vect (2 * (S n)) (BinaryTree a b))]
+                                'Prevs ::: STATE (List $ BinaryTree a b),
+                                'Curs ::: STATE (List $ BinaryTree a b)]
                            else [STDIO,
-                                'Prevs ::: STATE (Vect n (BinaryTree a b)),
-                                'Curs ::: STATE (Vect (S n) (BinaryTree a b))])
+                                'Prevs ::: STATE (List $ BinaryTree a b),
+                                'Curs ::: STATE (List $ BinaryTree a b)])
 recPrinter = case not $ onlyEmpty !('Curs :- get) of
                   False => pureM False
                   True  => do (np, nc) <- (rowPrinter !('Prevs :- get) !('Curs :- get))
                               'Prevs :- putM np
                               'Curs :- putM nc
-                              pureM True
+                              recPrinter
+                              
 
 
 
 
 
 treePrinter : Show a => (t : BinaryTree a b) -> IO ()
-treePrinter r @ (Node k v l r) = do putStr $ show " " `times` width l
+treePrinter r @ (Node k v l r) = do putStr $ " " `times` width l
                                     putStr $ show k
-                                    putStrLn $ show " " `times` width r
+                                    putStrLn $ " " `times` width r
                                     runInit [(), 'Prevs := [r], 'Curs := [l, r]] recPrinter
                                     pure ()
                                 
@@ -235,7 +240,7 @@ treePrinter r @ (Node k v l r) = do putStr $ show " " `times` width l
 
 rec : Nat -> IO ()
 rec Z = pure ()
-rec (S k) = do putStrLn $ show $ S k
+rec (S k) = do putStrLn "  "
                rec k
 
 --pprint : BinaryTree a b -> IO ()
