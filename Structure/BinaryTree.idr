@@ -36,13 +36,13 @@ withoutLeftMost (Node x y z w) = case z of
                                       t @ (Node xl yl zl wl) => Node x y (withoutLeftMost zl) w
 
 value : BinaryTree Integer Double
-value = Node 1 1 EmptyTree EmptyTree
+value = Leaf 1 1 
 
 t0 : BinaryTree Integer Double
-t0 = Node 68 3 EmptyTree EmptyTree
+t0 = Leaf 68 3 
 
 t1 : BinaryTree Integer Double
-t1 = Node 54 3 EmptyTree EmptyTree
+t1 = Leaf 54 3 
 
 t2 : BinaryTree Integer Double
 t2 = Node 77 3 t0 EmptyTree
@@ -57,6 +57,8 @@ t4 = Node 28 8.18 (Leaf 17 3.3)
 dataValue : BinaryTree Integer Double
 dataValue = Node 50 9.0 t4
                         t3
+                        
+
 
 find : Ord a => a -> BinaryTree a b -> Maybe b
 find x EmptyTree = Nothing
@@ -71,6 +73,29 @@ insert (k, b)       EmptyTree      = Leaf k b
 insert dat @ (k, b) (Node x y z w) = if k < x
                                         then Node x y (insert dat z) w
                                         else Node x y z $ insert dat w
+
+mutual
+  lesses : Ord a => a -> BinaryTree a b -> BinaryTree a b
+  lesses k EmptyTree = EmptyTree
+  lesses k t @ (Node x y lt rt) 
+    = case k `compare` x of
+           EQ => lt
+           LT => lesses k lt
+           GT => Node x y lt $ lesses k rt
+
+  biggers : Ord a => a -> BinaryTree a b -> BinaryTree a b
+  biggers k EmptyTree = EmptyTree
+  biggers k (Node x y lt rt)
+    = case k `compare` x of
+           EQ => Node x y (biggers k lt) rt
+           LT => Node x y (biggers k lt) rt
+           GT => biggers k rt
+
+insertRoot : Ord a => (a, b) 
+                   -> BinaryTree a b
+                   -> BinaryTree a b
+insertRoot (k, v) EmptyTree          = Leaf k v
+insertRoot (k, v) t @ (Node y z w s) = Node k v (lesses k t) (biggers k t)
 
 delete : Ord a => a -> BinaryTree a b -> BinaryTree a b
 delete x EmptyTree = EmptyTree
@@ -101,7 +126,29 @@ rotateLeft x (Node y z w s) with (x == y)
                                      (Node ry rz rw rs) => Node ry rz (Node y z w rw) rs
                                 else Node y z w $ rotateLeft x $ s
   | True = Node y z w s
-                                
+
+weight : BinaryTree a b -> Integer
+weight EmptyTree = 0
+weight (Node x y lt rt) = weight lt + 1 + weight rt
+
+weightTree : BinaryTree a b -> BinaryTree (a, Integer) b
+weightTree EmptyTree = EmptyTree
+weightTree t @ (Node x y lt rt) = Node (x, weight t) y (weightTree lt) (weightTree rt)
+
+getNth : Integer -> BinaryTree (a, Integer) b -> Maybe a
+getNth n EmptyTree = Nothing
+getNth n (Node (k, w) d lt rt) 
+  = case lt of
+         EmptyTree 
+           => case n `compare` 1 of
+                   LT => Nothing
+                   EQ => Just k
+                   GT => getNth (n - 1) rt
+         Node (lk, lw) ld llt lrt 
+           => case n `compare` lw + 1 of
+                   EQ => Just k
+                   LT => getNth n lt
+                   GT => getNth (n - (lw + 1)) rt
 
 elemWidth : Nat
 elemWidth = 2
@@ -154,6 +201,10 @@ testsearch v t = case find v t of
                       
 testinsert : (Integer, Double) -> BinaryTree Integer Double -> BinaryTree Integer Double
 testinsert = insert
+
+testinsertroot : (Integer, Double) -> BinaryTree Integer Double -> BinaryTree Integer Double
+testinsertroot = insertRoot
+
 
 testdelete : Integer -> BinaryTree Integer Double -> BinaryTree Integer Double
 testdelete = delete
@@ -238,12 +289,8 @@ treePrinter r @ (Node k v l r) = do putStr $ " " `times` width l
 
 
 
-rec : Nat -> IO ()
-rec Z = pure ()
-rec (S k) = do putStrLn "  "
-               rec k
-
---pprint : BinaryTree a b -> IO ()
-
-main : IO ()
-main = rec 8 -- print $ show $ pprint dataValue
+tree : BinaryTree Integer Double
+tree = insert 
+  (10, 8) $ insert (13, 3) $ insert (18, 2) $ insert (23, 1) $ insert (70, 2) $ insert
+  (80, 2) $ insert (88, 2) $ insert (99, 2) $ insert (92, 2) $ insert (75, 2) $ insert
+  (21, 2) $ insert (12, 2) $ insert (15, 2) $ insert (82, 2) t0
