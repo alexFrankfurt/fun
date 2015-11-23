@@ -1,6 +1,7 @@
 package fun
 
-pkgs = effects     
+pkgs = effects
+     , contrib
 
 modules = Cast
 	, Exer
@@ -26,6 +27,8 @@ modules = Cast
 	, Ibt.Main
 
 	, Structure.BinaryTree
+
+	, Parser.Combinator
 
 executable = ibt
 
