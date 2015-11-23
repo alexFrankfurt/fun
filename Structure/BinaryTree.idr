@@ -212,6 +212,11 @@ testdelete = delete
 testrotateleft : Integer -> BinaryTree Integer Double -> BinaryTree Integer Double
 testrotateleft = rotateLeft
 
+testgetnth : Integer -> BinaryTree Integer Double -> Integer
+testgetnth n t = case getNth n (weightTree t) of
+                      Just a => a
+                      _ => -1
+
 
 onlyEmpty : List $ BinaryTree a b -> Bool
 onlyEmpty ts = foldl check True ts

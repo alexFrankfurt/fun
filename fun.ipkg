@@ -1,6 +1,6 @@
 package fun
 
-opts = "-p effects"
+pkgs = effects     
 
 modules = Cast
 	, Exer
