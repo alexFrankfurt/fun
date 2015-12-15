@@ -30,6 +30,8 @@ modules = Cast
 
 	, Parser.Combinator
 
+	, Ent.Concept
+
 executable = ibt
 
 main = Ibt.Main
