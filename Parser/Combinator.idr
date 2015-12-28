@@ -1,6 +1,7 @@
 module Parser.Combinator
 
 import Control.Algebra.NumericInstances
+import Data.Vect
 
 data Par : Type -> Type where
   Pr : (String -> List (a, String)) -> Par a
@@ -22,7 +23,7 @@ item = \inp =>
   case unpack inp of
     [] => []
     x :: xs => [(x, pack xs)]
-    
+  
 bind : Parser a -> (a -> Parser b) -> Parser b
 bind p f = \inp => concat [f v inp' | (v, inp') <- p inp]
 
@@ -30,7 +31,7 @@ bind p f = \inp => concat [f v inp' | (v, inp') <- p inp]
 -- seq p q = bind p $ \x =>
 --           bind q $ \y =>
 --           result (x, y)
-          
+                              
 sat : (Char -> Bool) -> Parser Char
 sat p = bind item $ \x =>
         if p x then result x else zero
@@ -72,10 +73,15 @@ class MMonad (m : Type -> Type) where
 --  `-- ./Parser/Combinator.idr line 71 col 9:
 --      Parser  cannot be a parameter of Parser.Combinator.MMonad
 --      (Type class arguments must be injective)                                    
-instance MMonad Parser where
-  mresult v = \inp => [(v,inp)]
-  mbind p f = \inp => concat [f v out | (v, out) <- p inp]
+-- instance MMonad Parser where
+--   mresult v = \inp => [(v,inp)]
+--   mbind p f = \inp => concat [f v out | (v, out) <- p inp]
 
+-- string : String -> Parser String
+-- string "" = \inp => [("", inp)]
+-- string str with (unpack str)
+--   | [] = \inp => [("", inp)]
+--   | (x :: xs) = \inp => [("", inp)]
 
 v : List Int
 v = [3,3]
