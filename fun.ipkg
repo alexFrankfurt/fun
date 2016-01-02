@@ -32,6 +32,9 @@ modules = Cast
 
 	, Ent.Concept
 
-executable = ibt
+	, Conf.Main
+	, Conf.Parser.Core
 
-main = Ibt.Main
+executable = conf
+
+main = Conf.Main
