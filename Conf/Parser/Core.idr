@@ -50,14 +50,17 @@ instance Applicative Parser' where
     (f input) <*> (p input)
     --(\g => g <*> (p input)) <$> (f input)
 
-join : Result s (Result s a) -> Result s a
+join : Result s (Parser' a) -> Parser' a
 join (Success s r) = r
-join (Failure f) = Failure f
+join (Failure f) = MkParser' $ \input => Failure input
 
--- instance Monad Parser' where
---   -- (>>=) : m a -> (a -> m b) -> m b
---   (MkParser' p) >>= f = MkParser' $ \input =>
---     join (f (p input))
+parserApply : Parser' a -> String -> Result String a
+parserApply (MkParser' p) s = p s
+
+instance Monad Parser' where
+  -- (>>=) : m a -> (a -> m b) -> m b
+  (MkParser' p) >>= f = MkParser' $ \input =>
+    parserApply (join $ f <$> (p input)) input
 
 pure : a -> Parser a
 pure value
