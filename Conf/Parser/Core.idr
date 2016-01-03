@@ -28,7 +28,7 @@ data Parser : (a : Type) -> Type where
   MkParser : (String -> List (a, String)) -> Parser a
 
 data Parser' : (a : Type) -> Type where
-  MkParser' : (String -> Result a) -> Parser' a
+  MkParser' : (String -> Result String a) -> Parser' a
 
 instance Functor Parser where
   map f (MkParser g) = MkParser $ \input =>
@@ -44,13 +44,36 @@ instance Functor Parser' where
 --   (MkParser f) <*> (MkParser g) = MkParser $ \input =>
 --     map (\(v, k) => ) $ g input
 
+instance Applicative Parser' where
+  pure v = MkParser' $ \input => Success input v
+  (MkParser' f) <*> (MkParser' p) = MkParser' $ \input =>
+    (f input) <*> (p input)
+    --(\g => g <*> (p input)) <$> (f input)
+
+join : Result s (Result s a) -> Result s a
+join (Success s r) = r
+join (Failure f) = Failure f
+
+-- instance Monad Parser' where
+--   -- (>>=) : m a -> (a -> m b) -> m b
+--   (MkParser' p) >>= f = MkParser' $ \input =>
+--     join (f (p input))
+
 pure : a -> Parser a
 pure value
   = MkParser $ \input =>
                [(value, input)]
 
+pure' : a -> Parser' a
+pure' value
+  = MkParser' $ \input =>
+                Success input value
+
 neutral : Parser a
 neutral = MkParser $ \input => []
+
+neutral' : Parser' a
+neutral' = MkParser' $ \input => Failure input
 
 item : Parser Char
 item = MkParser $ \input =>
