@@ -67,16 +67,16 @@ pure value
   = MkParser $ \input =>
                [(value, input)]
 
-pure' : a -> Parser' a
-pure' value
-  = MkParser' $ \input =>
-                Success input value
+-- pure' : a -> Parser' a
+-- pure' value
+--   = MkParser' $ \input =>
+--                 Success input value
 
 neutral : Parser a
 neutral = MkParser $ \input => []
 
-neutral' : Parser' a
-neutral' = MkParser' $ \input => Failure input
+-- neutral' : Parser' a
+-- neutral' = MkParser' $ \input => Failure input
 
 item : Parser Char
 item = MkParser $ \input =>
