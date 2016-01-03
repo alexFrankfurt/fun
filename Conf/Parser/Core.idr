@@ -2,11 +2,27 @@ module Conf.Parser.Core
 
 -- Represent medium result of Parsing as dual data
 -- structure not as list.
-data Result a = Success a | Failure
+-- Slightly unhappy that implementation of Functor
+-- adds constraint: context goes first because I cannot
+-- give an implementation something like:
+-- ```idris
+-- instance Functor Result _ a where
+-- ...
+-- ```
+data Result : s -> a -> Type where
+  Success : String -> a -> Result s a
+  Failure : String -> Result s a
 
-instance Functor Result where
-  map f (Success a) = Success $ f a
-  map f Failure     = Failure
+
+instance Functor (Result s) where
+  map f (Success s a) = Success s $ f a
+  map f (Failure s)   = Failure s       -- ones confused with id function
+
+instance Applicative (Result s) where
+  pure f = Success "" f
+  -- needs improvements?
+  (Success s f) <*> g = f <$> g
+  (Failure s) <*> g = Failure s
 
 data Parser : (a : Type) -> Type where
   MkParser : (String -> List (a, String)) -> Parser a
