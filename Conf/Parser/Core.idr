@@ -75,14 +75,28 @@ pure value
 neutral : Parser a
 neutral = MkParser $ \input => []
 
--- neutral' : Parser' a
--- neutral' = MkParser' $ \input => Failure input
+neutral' : Parser' a
+neutral' = MkParser' $ \input => Failure input
 
 item : Parser Char
 item = MkParser $ \input =>
   case unpack input of
     []      => []
     x :: xs => [(x, pack xs)]
+
+item' : Parser' Char
+item' = MkParser' $ \input =>
+  case unpack input of
+    []      => Failure ""
+    x :: xs => Success (pack xs) x
+
+-- sat : (Char -> Bool) -> Parser' Char
+-- sat p = (>>=) item $ \x =>
+--   if p x then pure x else neutral
+--         -- do x <- item
+--         --    if p x
+--         --      then pure x
+--         --      else neutral
 
 bind : Parser a -> (a -> Parser b) -> Parser b
 bind p f = MkParser $ \inpt => ?rhs
