@@ -62,18 +62,18 @@ instance Monad Parser' where
   (MkParser' p) >>= f = MkParser' $ \input =>
     parserApply (join $ f <$> (p input)) input
 
-pure : a -> Parser a
-pure value
-  = MkParser $ \input =>
-               [(value, input)]
+-- pure : a -> Parser a
+-- pure value
+--   = MkParser $ \input =>
+--                [(value, input)]
 
 -- pure' : a -> Parser' a
 -- pure' value
 --   = MkParser' $ \input =>
 --                 Success input value
 
-neutral : Parser a
-neutral = MkParser $ \input => []
+-- neutral : Parser a
+-- neutral = MkParser $ \input => []
 
 neutral' : Parser' a
 neutral' = MkParser' $ \input => Failure input
