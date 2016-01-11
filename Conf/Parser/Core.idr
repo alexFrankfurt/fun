@@ -90,13 +90,11 @@ item' = MkParser' $ \input =>
     []      => Failure ""
     x :: xs => Success (pack xs) x
 
--- sat : (Char -> Bool) -> Parser' Char
--- sat p = (>>=) item $ \x =>
---   if p x then pure x else neutral
---         -- do x <- item
---         --    if p x
---         --      then pure x
---         --      else neutral
+sat : (Char -> Bool) -> Parser' Char
+sat p = do x <- item'
+           if p x
+             then pure x
+             else neutral'
 
 bind : Parser a -> (a -> Parser b) -> Parser b
 bind p f = MkParser $ \inpt => ?rhs
