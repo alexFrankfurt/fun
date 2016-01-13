@@ -14,11 +14,11 @@ data Result : s -> a -> Type where
   Failure : String -> Result s a
 
 
-instance Functor (Result s) where
+Functor (Result s) where
   map f (Success s a) = Success s $ f a
   map f (Failure s)   = Failure s       -- ones confused with id function
 
-instance Applicative (Result s) where
+Applicative (Result s) where
   pure f = Success "" f
   -- needs improvements?
   (Success s f) <*> g = f <$> g
@@ -30,11 +30,11 @@ data Parser : (a : Type) -> Type where
 data Parser' : (a : Type) -> Type where
   MkParser' : (String -> Result String a) -> Parser' a
 
-instance Functor Parser where
+Functor Parser where
   map f (MkParser g) = MkParser $ \input =>
     map (\(v, t) => (f v, t)) $ g input
 
-instance Functor Parser' where
+Functor Parser' where
   map f (MkParser' g) = MkParser' $ \input =>
     f <$> (g input)
 
@@ -44,7 +44,7 @@ instance Functor Parser' where
 --   (MkParser f) <*> (MkParser g) = MkParser $ \input =>
 --     map (\(v, k) => ) $ g input
 
-instance Applicative Parser' where
+Applicative Parser' where
   pure v = MkParser' $ \input => Success input v
   (MkParser' f) <*> (MkParser' p) = MkParser' $ \input =>
     (f input) <*> (p input)
@@ -57,7 +57,7 @@ join (Failure f) = MkParser' $ \input => Failure input
 parserApply : Parser' a -> String -> Result String a
 parserApply (MkParser' p) s = p s
 
-instance Monad Parser' where
+Monad Parser' where
   -- (>>=) : m a -> (a -> m b) -> m b
   (MkParser' p) >>= f = MkParser' $ \input =>
     parserApply (join $ f <$> (p input)) input
