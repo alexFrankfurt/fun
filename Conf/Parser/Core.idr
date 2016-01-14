@@ -25,17 +25,10 @@ Applicative (Result s) where
   (Failure s) <*> g = Failure s
 
 data Parser : (a : Type) -> Type where
-  MkParser : (String -> List (a, String)) -> Parser a
-
-data Parser' : (a : Type) -> Type where
-  MkParser' : (String -> Result String a) -> Parser' a
+  MkParser : (String -> Result String a) -> Parser a
 
 Functor Parser where
   map f (MkParser g) = MkParser $ \input =>
-    map (\(v, t) => (f v, t)) $ g input
-
-Functor Parser' where
-  map f (MkParser' g) = MkParser' $ \input =>
     f <$> (g input)
 
 -- instance Applicative Parser where
@@ -44,60 +37,35 @@ Functor Parser' where
 --   (MkParser f) <*> (MkParser g) = MkParser $ \input =>
 --     map (\(v, k) => ) $ g input
 
-Applicative Parser' where
-  pure v = MkParser' $ \input => Success input v
-  (MkParser' f) <*> (MkParser' p) = MkParser' $ \input =>
+Applicative Parser where
+  pure v = MkParser $ \input => Success input v
+  (MkParser f) <*> (MkParser p) = MkParser $ \input =>
     (f input) <*> (p input)
     --(\g => g <*> (p input)) <$> (f input)
 
-join : Result s (Parser' a) -> Parser' a
+join : Result s (Parser a) -> Parser a
 join (Success s r) = r
-join (Failure f) = MkParser' $ \input => Failure input
+join (Failure f) = MkParser $ \input => Failure input
 
-parserApply : Parser' a -> String -> Result String a
-parserApply (MkParser' p) s = p s
+parserApply : Parser a -> String -> Result String a
+parserApply (MkParser p) s = p s
 
-Monad Parser' where
+Monad Parser where
   -- (>>=) : m a -> (a -> m b) -> m b
-  (MkParser' p) >>= f = MkParser' $ \input =>
+  (MkParser p) >>= f = MkParser $ \input =>
     parserApply (join $ f <$> (p input)) input
 
--- pure : a -> Parser a
--- pure value
---   = MkParser $ \input =>
---                [(value, input)]
-
--- pure' : a -> Parser' a
--- pure' value
---   = MkParser' $ \input =>
---                 Success input value
-
--- neutral : Parser a
--- neutral = MkParser $ \input => []
-
-neutral' : Parser' a
-neutral' = MkParser' $ \input => Failure input
+neutral : Parser a
+neutral = MkParser $ \input => Failure input
 
 item : Parser Char
 item = MkParser $ \input =>
   case unpack input of
-    []      => []
-    x :: xs => [(x, pack xs)]
-
-item' : Parser' Char
-item' = MkParser' $ \input =>
-  case unpack input of
     []      => Failure ""
     x :: xs => Success (pack xs) x
 
-sat : (Char -> Bool) -> Parser' Char
-sat p = do x <- item'
+sat : (Char -> Bool) -> Parser Char
+sat p = do x <- item
            if p x
              then pure x
-             else neutral'
-
-bind : Parser a -> (a -> Parser b) -> Parser b
-bind p f = MkParser $ \inpt => ?rhs
-
-process : String -> Parser Int
-process str = ?rhs
+             else neutral

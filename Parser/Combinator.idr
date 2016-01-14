@@ -3,11 +3,32 @@ module Parser.Combinator
 import Control.Algebra.NumericInstances
 import Data.Vect
 
-data Par : Type -> Type where
-  Pr : (String -> List (a, String)) -> Par a
+data Parser : (a : Type) -> Type where
+  MkParser : (String -> List (a, String)) -> Parser a
 
-result' : a -> Par a
-result' v = Pr $ \inp => [(v, inp)]
+Functor Parser where
+  map f (MkParser g) = MkParser $ \input =>
+    map (\(v, t) => (f v, t)) $ g input
+
+item : Parser Char
+item = MkParser $ \input =>
+  case unpack input of
+    []      => []
+    x :: xs => [(x, pack xs)]
+
+bind : Parser a -> (a -> Parser b) -> Parser b
+bind p f = MkParser $ \inpt => ?rhs
+
+pure : a -> Parser a
+pure value
+  = MkParser $ \input =>
+               [(value, input)]
+
+neutral : Parser a
+neutral = MkParser $ \input => []
+
+result : a -> Parser a
+result v = MkParser $ \inp => [(v, inp)]
 
 Parser : Type -> Type
 Parser a = String -> List (a, String)
@@ -23,7 +44,7 @@ item = \inp =>
   case unpack inp of
     [] => []
     x :: xs => [(x, pack xs)]
-  
+
 bind : Parser a -> (a -> Parser b) -> Parser b
 bind p f = \inp => concat [f v inp' | (v, inp') <- p inp]
 
@@ -31,11 +52,11 @@ bind p f = \inp => concat [f v inp' | (v, inp') <- p inp]
 -- seq p q = bind p $ \x =>
 --           bind q $ \y =>
 --           result (x, y)
-                              
+
 sat : (Char -> Bool) -> Parser Char
 sat p = bind item $ \x =>
         if p x then result x else zero
-        
+
 char : Char -> Parser Char
 char x = sat $ \y => x == y
 
@@ -65,14 +86,14 @@ word = plus neWord $ result ""
                   bind word   $ \xs =>
                   result $ pack $ x :: (unpack xs)
 
-class MMonad (m : Type -> Type) where
+interface MMonad (m : Type -> Type) where
   mresult : a -> m a
   mbind   : m a -> (a -> m b) -> m b
 
 -- - + Errors (1)
 --  `-- ./Parser/Combinator.idr line 71 col 9:
 --      Parser  cannot be a parameter of Parser.Combinator.MMonad
---      (Type class arguments must be injective)                                    
+--      (Type class arguments must be injective)
 -- instance MMonad Parser where
 --   mresult v = \inp => [(v,inp)]
 --   mbind p f = \inp => concat [f v out | (v, out) <- p inp]
