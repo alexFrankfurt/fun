@@ -3,37 +3,38 @@ package fun
 pkgs = effects
      , contrib
 
-modules = Cast
-	, Exer
-	, Model
-	, Door
-	, Printf
-	, Syntax
-	, Tests
-	, Two
-	, NamedInstance
-	  
-	, Effect.Simplest
-	, Effect.Counter
-	, Effect.Door
-	, Effect.StringRecorder
-	, Effect.GuessNumber
-	, Effect.Simple
-	, Effect.FFile
-	, Effect.EEffects
-	, Effect.Exprc
-	, Effect.NTimes
-
-	, Ibt.Main
-
-	, Structure.BinaryTree
-
-	, Parser.Combinator
-
-	, Ent.Concept
+modules =
+    Algo.MergeSort
+  , Algo.QuickSort
 
 	, Conf.Main
 	, Conf.Parser.Core
+
+  , Effect.Counter
+  , Effect.EEffects
+  , Effect.Expr
+  , Effect.GuessNumber
+  , Effect.NTimes
+  , Effect.Simple
+	, Effect.Simplest
+  , Effect.StringRecorder
+
+  , Ent.Concept
+
+	, Ibt.Main
+
+  , Parser.Combinator
+
+	, Structure.BinaryTree
+
+  , Cast
+	, Exer
+	, Model
+  , NamedInstance
+  , Printf
+  , Syntax
+  , Tests
+  , Two
 
 executable = conf
 
