@@ -18,7 +18,7 @@ effinc = do i' <- get
 
 -- appends to a vector if given word begins with 'a'
 -- todo
-vectorStore : String -> 
+vectorStore : String ->
               with DepEff Eff Bool [STATE (Vect n String)]
               (\ok => if ok then [STATE (Vect (S n) String)]
                             else [STATE (Vect n String)])
@@ -26,12 +26,12 @@ vectorStore s = do case strHead s of
                         'a' => do putM (s :: !get)
                                   pureM True
                         _   => pureM False
-                   
--- make flow: 
+
+-- make flow:
 --   user enters string
 --   we may be prepend it to a vector
 --   user can 'ask' us for stored strings with "ask" word
---   and terminate session with "bye" word                   
+--   and terminate session with "bye" word
 -- vecFlow : { [STATE (Vect n String), STDIO] ==>
 --               {ok} if ok then [STATE (Vect (S n) String), STDIO]
 --                          else [STATE (Vect n String), STDIO ] } Eff ()
@@ -39,7 +39,7 @@ vectorStore s = do case strHead s of
 --              vectorStore !getStr
 --              vecFlow
 
-                                      
+
 flow : { [STDIO, STATE Int] } Eff ()
 flow = do putStrLn "I begin working..."
           putStrLn $ cast 10
@@ -52,9 +52,8 @@ flow = do putStrLn "I begin working..."
           let i = runPureInit ['Lbl := 10] lbldeff
           putStrLn $ cast i
           putStrLn "I've done with work"
-          
+
 main : IO ()
-main = do --putM ("Hi!" :: !get)
-          putStrLn "Enter word, begining with a:"
-          word <- getStr
-          putStrLn word
+main = do putStrLn "Enter word, begining with a:"
+          -- word <- getStr
+          -- putStrLn word

@@ -3,13 +3,15 @@ module StringRecorder
 import Effects
 import Effect.State
 import Effect.StdIO
+import Data.Vect
 
-rec : { [STATE (Vect n String), STDIO] ==> 
-        [STATE (Vect (S n) String), STDIO] } Eff ()
+rec : TransEff.Eff ()
+                   [STATE (Vect n String), STDIO]
+                   [STATE (Vect (S n) String), STDIO]
 rec = do putStrLn "Enter text: "
-         x <- !getLine
-         put (x :: !get)
+         x <- getStr
+         --put (x :: !get)
          rec
 
-main : IO ()
-main = runInit rec
+-- main : IO ()
+-- main = runInit [Data.Vect.Nil] rec

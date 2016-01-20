@@ -25,23 +25,23 @@ FileIO st t = Eff t [FILE_IO st, STDIO]
 --                 algo $ n + 1
 
 hugeComputations : String
-hugeComputations = "Hello, world"           
-          
+hugeComputations = "Hello, world"
+
 -- print "Hello, world!" n times
 -- call it: do manyTimes n
---      or: manyTimes n                         
+--      or: manyTimes n
 manyTimes : Nat -> IO ()
 manyTimes n = if n == Z
                  then return ()
                  else do putStrLn "Hello, world!"
-                         manyTimes (n - 1)
+                         manyTimes (n `minus` 1)
 
 writeNTS : Nat -> String -> { [FILE_IO (OpenFile Write), STDIO] } Eff ()
 writeNTS n s = case n of
                     Z => do return ()
                     _ => do writeLine s
-                            writeNTS (n - 1) s
-                  
+                            writeNTS (n `minus` 1) s
+
 openAndBegin : { [FILE_IO (), STDIO] } Eff ()
 openAndBegin = do True <- open "outh" Write | False => putStrLn "Error!"
                   putStrLn "File opened!"
@@ -59,7 +59,7 @@ openAndBegin = do True <- open "outh" Write | False => putStrLn "Error!"
 -- writeMany n = do if n == Z
 --                     then return ()
 --                     else do putStrLn "Hello, world!"
---                             writeMany (n - 1)                         
+--                             writeMany (n - 1)
 
 main : IO ()
 main = run openAndBegin

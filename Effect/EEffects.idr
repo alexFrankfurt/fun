@@ -14,4 +14,4 @@ communicate = do putStr "Enter: "
 
 
 main : IO ()
-main = run communicate            
+main = run communicate
