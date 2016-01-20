@@ -1,4 +1,4 @@
-module Mergesort
+module Algo.MergeSort
 
 toNatDouble : Double -> Nat
 toNatDouble d = fromIntegerNat (cast d)
@@ -16,7 +16,7 @@ combine (x::xs) (y::ys) = if x < y
 mergeSort : Ord a => List a -> List a
 mergeSort []             = []
 mergeSort (x::[])        = x::[]
-mergeSort l @ (x::y::xs) = 
+mergeSort l @ (x::y::xs) =
   let n = fromInteger (toIntegerNat (with List length l)) / 2 in
       combine (mergeSort (with List take (toNatDouble n) l))
               (mergeSort (with List drop (toNatDouble n) l))

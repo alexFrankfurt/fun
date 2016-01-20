@@ -12,7 +12,7 @@ A = Entity
 B : EntCore
 B = Entity
 
-C : EntCore 
+C : EntCore
 C = A -> B
 
 D : EntCore

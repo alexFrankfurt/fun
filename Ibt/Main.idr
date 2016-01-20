@@ -15,7 +15,7 @@ noBuildFileErrorMessage = "Error."
 
 readProject : { [FILE_IO (), STDIO] } Eff ()
 readProject = do putStrLn loadingMessage
-                 True <- open buildFileName ReadWrite 
+                 True <- open buildFileName ReadWrite
                  | False => putStrLn noBuildFileErrorMessage
                  close
 

@@ -1,17 +1,17 @@
 module Model
 
-class Top a where
+interface Top a where
   showTy : a -> String
 
 data MidL = MkMidL Double
 
 data MidR = MkMidR Double
 
-instance Top MidL where
+Top MidL where
   showTy _ = "MidL"
 
-instance Top MidR where
-  showTy _ = "MIdR"
+Top MidR where
+  showTy _ = "MidR"
 
 td1 : MidL
 td1 = MkMidL 10
@@ -19,38 +19,27 @@ td1 = MkMidL 10
 td2 : MidR
 td2 = MkMidR 20
 
--- fun : Top a => a -> String
--- fun b = case b of
---               => "Llllll"
---              (MkMidR c) => "RRRRRRRR"
-
--- res0 : String
--- res0 = fun td1
-
--- res1 : String
--- res1 = fun td2
-
 data Relation = Rel1
               | Rel2
               | Rel3
               | Rel4
               | Rel5
 
-class Relationable a where
+interface Relationable a where
   relate : (Relationable b) => a -> b -> Relation
-  
+
 data Point = MkPoint Double Double
 
 data Line = MkLine Point Point
 
-instance Relationable Point where
+Relationable Point where
   relate (MkPoint a b) (MkPoint c d) = Rel1
   relate (MkPoint a b) (MkLine c d) = Rel2
 
-instance Relationable Line where
+Relationable Line where
   relate (MkLine a b) (MkLine c d) = Rel4
   relate (MkLine a b) (MkPoint c d) = Rel3
-  
+
 tdp1 : Point
 tdp1 = MkPoint 1 (-1)
 
@@ -61,8 +50,8 @@ tdl1 : Line
 tdl1 = MkLine tdp1 tdp2
 
 tdl2 : Line
-tdl2 = MkLine (MkPoint (-111) 88) (MkPoint 0 0)        
-  
+tdl2 = MkLine (MkPoint (-111) 88) (MkPoint 0 0)
+
 res0 : Relation
 res0 = tdp1 `relate` tdp2
 
@@ -80,21 +69,17 @@ res = (res0, res1, res2, res3)
 
 -- for a while it's good solution for
 -- relation problem
-class Relater a b where
+interface Relater a b where
   relater : a -> b -> Relation
-  
-instance Relater Point Line where 
+
+Relater Point Line where
   relater (MkPoint x y) (MkLine p1 p2) = Rel1
-  
-instance Relater Point Point where
+
+Relater Point Point where
   relater (MkPoint x y) (MkPoint z w) = Rel2
-  
+
 res4 : Relation
 res4 = relater tdp1 tdp2
 
 res5 : Relation
 res5 = relater tdp1 tdl2
-
-data File
-
-data Directory

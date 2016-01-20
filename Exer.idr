@@ -7,8 +7,8 @@ repeat Z     _ = []
 repeat (S k) a = a :: repeat k a
 
 vtake : (n : Nat) -> Vect (n + t) a -> Vect n a
-vtake Z     _       = []  
-vtake (S t) (x::xs) = x::vtake t xs 
+vtake Z     _       = []
+vtake (S t) (x::xs) = x::vtake t xs
 
 vdrop : (n : Nat) -> Vect (n + t) a -> Vect t a
 vdrop Z     xs      = xs

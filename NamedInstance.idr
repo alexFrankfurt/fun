@@ -4,15 +4,15 @@ record Point where
   constructor MkPoint
   x : Double
   y : Double
-  
-instance Eq Point where
+
+Eq Point where
   (==) (MkPoint x1 y1) (MkPoint x2 y2) = x1 == x2 && y1 == y2
 
-instance [xord] Ord Point where
+[xord] Ord Point where
   compare (MkPoint x1 y1) (MkPoint x2 y2) = compare x1 x2
-  
-instance [yord] Ord Point where
-  compare (MkPoint x1 y1) (MkPoint x2 y2) = compare y1 y2    
+
+[yord] Ord Point where
+  compare (MkPoint x1 y1) (MkPoint x2 y2) = compare y1 y2
 
 basePoint : Point
 basePoint = MkPoint 0 0

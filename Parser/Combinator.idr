@@ -30,23 +30,23 @@ neutral = MkParser $ \input => []
 result : a -> Parser a
 result v = MkParser $ \inp => [(v, inp)]
 
-Parser : Type -> Type
-Parser a = String -> List (a, String)
+-- Parser : Type -> Type
+-- Parser a = String -> List (a, String)
 
-result : a -> Parser a
-result v = \inp => [(v, inp)]
+-- result : a -> Parser a
+-- result v = \inp => [(v, inp)]
 
 zero : Parser a
-zero = \inp => []
+zero = MkParser $ \inp => []
 
-item : Parser Char
-item = \inp =>
-  case unpack inp of
-    [] => []
-    x :: xs => [(x, pack xs)]
+-- item : Parser Char
+-- item = \inp =>
+--   case unpack inp of
+--     [] => []
+--     x :: xs => [(x, pack xs)]
 
-bind : Parser a -> (a -> Parser b) -> Parser b
-bind p f = \inp => concat [f v inp' | (v, inp') <- p inp]
+-- bind : Parser a -> (a -> Parser b) -> Parser b
+-- bind p f = \inp => concat [f v inp' | (v, inp') <- p inp]
 
 -- seq : Parser a -> Parser b -> ?hos
 -- seq p q = bind p $ \x =>
@@ -70,7 +70,7 @@ upper : Parser Char
 upper = sat $ \x => 'A' <= x && x <= 'Z'
 
 plus : Parser a -> Parser a -> Parser a
-plus p q = \inp => (p inp ++ q inp)
+plus (MkParser p) (MkParser q) = MkParser $ \inp => (p inp ++ q inp)
 
 letter : Parser Char
 letter = plus lower upper
