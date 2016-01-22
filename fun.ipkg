@@ -7,8 +7,8 @@ modules =
     Algo.MergeSort
   , Algo.QuickSort
 
-	, Conf.Main
-	, Conf.Parser.Core
+  , Conf.Main
+  , Conf.Parser.Core
 
   , Effect.Counter
   , Effect.EEffects
@@ -16,20 +16,20 @@ modules =
   , Effect.GuessNumber
   , Effect.NTimes
   , Effect.Simple
-	, Effect.Simplest
+  , Effect.Simplest
   , Effect.StringRecorder
 
   , Ent.Concept
 
-	, Ibt.Main
+  , Ibt.Main
 
   , Parser.Combinator
 
-	, Structure.BinaryTree
+  , Structure.BinaryTree
 
   , Cast
-	, Exer
-	, Model
+  , Exer
+  , Model
   , NamedInstance
   , Printf
   , Syntax
