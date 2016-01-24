@@ -69,3 +69,6 @@ sat p = do x <- item
            if p x
              then pure x
              else neutral
+
+char : Char -> Parser Char
+char x = sat (\y => x == y)
