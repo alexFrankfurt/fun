@@ -106,3 +106,10 @@ interface MMonad (m : Type -> Type) where
 
 v : List Int
 v = [3,3]
+
+total
+parse : Parser a -> String -> Maybe a
+parse (MkParser p) str
+  = case (p str) of
+         [(v, str)] => Just v
+         _          => Nothing
