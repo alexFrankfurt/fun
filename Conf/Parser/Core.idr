@@ -15,6 +15,9 @@ data Result : s -> a -> Type where
   Success : String -> a -> Result s a
   Failure : String -> Result s a
 
+(Show s, Show a) => Show (Result s a) where
+  show (Success str v) = "Success with " ++ show v ++ ", left environment: " ++ str
+  show (Failure str)   = "Failed in environment: " ++ str
 
 Functor (Result s) where
   map f (Success s a) = Success s $ f a
