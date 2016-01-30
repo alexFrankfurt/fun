@@ -8,6 +8,7 @@ modules =
   , Algo.QuickSort
 
   , Conf.Main
+  , Conf.Test
   , Conf.Parser.Core
 
   , Effect.Counter
