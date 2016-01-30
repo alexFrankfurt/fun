@@ -1,5 +1,7 @@
 module Conf.Parser.Core
 
+%access public export
+
 -- Represent medium result of Parsing as dual data
 -- structure not as list.
 -- Slightly unhappy that implementation of Functor
