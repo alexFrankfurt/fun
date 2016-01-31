@@ -1,10 +1,11 @@
 package fun
 
-pkgs = effects
-     , contrib
+pkgs
+  = effects
+  , contrib
 
-modules =
-    Algo.MergeSort
+modules
+  = Algo.MergeSort
   , Algo.QuickSort
 
   , Conf.Main
