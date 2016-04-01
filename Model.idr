@@ -13,6 +13,13 @@ Top MidL where
 Top MidR where
   showTy _ = "MidR"
 
+record Person where
+  constructor MkPerson
+  name : String
+
+Top Person where
+  showTy p = "Person"
+
 td1 : MidL
 td1 = MkMidL 10
 
