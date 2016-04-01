@@ -29,7 +29,9 @@ modules
 
   , Structure.BinaryTree
 
+  , TM.TM
   , TM.Types
+  , TM.Utils
 
   , Cast
   , Exer
