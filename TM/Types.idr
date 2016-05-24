@@ -12,8 +12,15 @@ interface ComputationalModel where
   Set : Type -> Type
   Set = List
 
-  Q : Type
-  Q = Set State
+interface ComputationalModel => TuringMachine where
+  Q : Set State
+
+-- TODO: Create data type for concrete task, finish
+-- specifications of ComputationalModel and TuringMachine
+
+-- ComputationalModel where
+--   data State = q1 | q2
+--   data Move = MkMove
 
 -- data Move = L | R
 
