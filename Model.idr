@@ -83,3 +83,20 @@ res4 = relater tdp1 tdp2
 
 res5 : Relation
 res5 = relater tdp1 tdl2
+
+--- Check inheritance overriding behaviour
+interface FiniteAutomata a where
+  f : a -> (Double, Double)
+
+namespace TM
+  interface FiniteAutomata a => TM a where
+    f : a -> Nat
+
+FiniteAutomata Integer where
+  f x = (1.1, 1.1)
+
+TM Integer where
+  f x = 2
+
+func : TM a => a -> Nat
+func x = f x
