@@ -100,3 +100,12 @@ TM Integer where
 
 func : TM a => a -> Nat
 func x = f x
+
+-- Data inside interfaces
+interface C where
+  data S : Type
+
+data Foo = Bar
+
+C where
+  S = Foo
