@@ -1,19 +1,41 @@
 module TM.Types
 
+import TM.TM
+
 %access export
 
--- data State = Q1
+data Move = L | R
+data State = Q0 | Qa | Qr
+  | Qp | Qp1
 
-interface ComputationalModel where
-  data State
+public export
+data Alphabet = O | I | S | E
 
-  data Move
+Show Alphabet where
+  show O = "O"
+  show I = "I"
+  show S = "#"
+  show E = "␣"
 
-  Set : Type -> Type
-  Set = List
+TuringMachine where
+  Move = with Types Move
+  Q = State
+  Γ = Alphabet
 
-interface ComputationalModel => TuringMachine where
-  Q : Set State
+  δ (Q0, O) = (Qp, O, R)
+  δ (Q0, I) = (Qp, I, R)
+  δ (Qp, O) = (Qp, O, R)
+  δ (Qp, I) = (Qp1, S, L)
+
+  q₀ = Q0
+  qₐ = Qa
+  qᵣ = Qr
+
+--fun : Input -> Output
+
+-- TuringMachine where
+--   Set = List
+--   Alphabet = [Int]
 
 -- TODO: Create data type for concrete task, finish
 -- specifications of ComputationalModel and TuringMachine
