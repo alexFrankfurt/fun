@@ -29,6 +29,7 @@ modules
 
   , Structure.BinaryTree
 
+  , TM.Main
   , TM.TM
   , TM.Types
   , TM.Utils
