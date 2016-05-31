@@ -1,18 +1,20 @@
 module TM.TM
 
-import TM.Types
-import TM.Utils
+%access public export
 
-data ComputationalModel : Type where
-  TuringMachine :
-    Q -> Σ -> Γ ->
-    (δ : (Q, Γ) -> (Q, Γ, Move)) ->
-    q₀ -> qₐ -> qᵣ -> ComputationalModel
+interface TuringMachine where
+  data Move
 
-testData : String
-testData = "10101100101"
+  data Q
 
-main : IO ()
-main = do putStrLn "Enter bits"
-          input <- getLine
-          print $ toBinary input
+  -- Should satisfy: Σ ∈ Γ, ␣ ∈ Γ
+  Γ : Type
+
+  -- Should satisfy: ␣ ∉ Σ
+  -- Σ : Type
+
+  δ : (Q, Γ) -> (Q, Γ, Move)
+
+  q₀ : Q
+  qₐ : Q
+  qᵣ : Q
