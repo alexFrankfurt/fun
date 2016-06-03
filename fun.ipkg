@@ -34,6 +34,7 @@ modules
 
   , Structure.BinaryTree
 
+  , TM.Alphabet
   , TM.Main
   , TM.TM
   , TM.Types

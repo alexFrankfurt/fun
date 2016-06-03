@@ -18,3 +18,5 @@ interface TuringMachine where
   q₀ : Q
   qₐ : Q
   qᵣ : Q
+
+  process : String -> String
