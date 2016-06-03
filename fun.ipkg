@@ -25,6 +25,11 @@ modules
 
   , Ibt.Main
 
+  , Interface.Common
+  , Interface.Impl1
+  , Interface.Impl2
+  , Interface.TwoImplImport
+
   , Parser.Combinator
 
   , Structure.BinaryTree
