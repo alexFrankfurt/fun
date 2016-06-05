@@ -8,6 +8,8 @@ modules
   = Algo.MergeSort
   , Algo.QuickSort
 
+  , Algorithm.Main
+
   , Conf.Main
   , Conf.Test
   , Conf.Parser.Core
