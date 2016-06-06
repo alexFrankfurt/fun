@@ -7,6 +7,10 @@ public export
 data SBoundedDouble : (a : Double) -> (b : Double) -> Type where
   MkSBD : (d : Double ** So (d > a && d < b)) -> SBoundedDouble a b
 
+-- TODO: partition property
+data Partition : (a : Type) -> Type where
+  MkPartition : List (List a) -> Partition a
+
 Bounded : Type
 Bounded = (d : Double ** So (d > 0 && d < 1))
 
