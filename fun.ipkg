@@ -25,6 +25,8 @@ modules
 
   , Ibt.Main
 
+  , Interface.Named
+
   , Parser.Combinator
 
   , Structure.BinaryTree
@@ -32,11 +34,9 @@ modules
   , Cast
   , Exer
   , Model
-  , NamedInstance
   , Printf
   , Syntax
   , Tests
-  , Two
 
 executable = conf
 

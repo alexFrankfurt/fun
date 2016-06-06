@@ -1,4 +1,4 @@
-module Closest
+module Interface.Named
 
 record Point where
   constructor MkPoint

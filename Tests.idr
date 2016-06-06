@@ -7,4 +7,6 @@ import Data.Vect
 
 safeTail : Vect n a -> Maybe (Vect (n `minus` 1) a)
 safeTail [] = Nothing
-safeTail {n = S n} (x :: xs) = Just (rewrite minusZeroRight n in ?xs)
+safeTail {n = S n} (x :: xs) = Just (rewrite minusZeroRight n in xs)
+
+safeTail' : Vect n a -> {auto ok : LTE 1 n} -> Vect (n `minus` 1) a
