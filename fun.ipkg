@@ -10,6 +10,7 @@ modules
 
   , Algorithm.Main
   , Algorithm.BPPOD.Model
+  , Algorithm.BPPOD.Property
 
   , Conf.Main
   , Conf.Test
