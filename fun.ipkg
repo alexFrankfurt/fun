@@ -9,6 +9,7 @@ modules
   , Algo.QuickSort
 
   , Algorithm.Main
+  , Algorithm.BPPOD.Model
 
   , Conf.Main
   , Conf.Test
