@@ -6,7 +6,7 @@ interface BPPOD
   -- Finite set
   data A
 
-  -- Lenghts of elements of a,
+  -- Lenghts of elements of A,
   -- should be inside (0, 1) interval.
   l : A -> SBoundedDouble 0 1
 
