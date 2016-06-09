@@ -16,6 +16,8 @@ modules
   , Conf.Test
   , Conf.Parser.Core
 
+  , Data.Set
+
   , Effect.Counter
   , Effect.EEffects
   , Effect.Expr

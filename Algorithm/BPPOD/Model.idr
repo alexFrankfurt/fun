@@ -1,6 +1,7 @@
 module Algorithm.BPPOD.Model
 
 import Algorithm.BPPOD.Property
+import Data.Set
 
 interface BPPOD
   -- Finite set
@@ -12,4 +13,4 @@ interface BPPOD
 
   -- Partition of A into minimal by number set of parts Aᵢ
   -- such that Σ l(aᵢ) ≤ 1
-  partition : A -> List $ List A
+  partition : A -> List $ Set A
