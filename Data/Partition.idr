@@ -4,7 +4,7 @@ import Data.Set
 
 -- I guess it requires bijection between types
 data Partition : (a : Type) -> Type where
-  MkPartition : List $ Set a -> Partition a
+  MkPartition : Set $ Set a -> Partition a
 
 -- bijection
 infixl 4 <->
