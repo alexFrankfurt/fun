@@ -16,8 +16,13 @@ infixl 4 -<-
 data (<->) : Type -> Type -> Type where
   Mk : a -> b -> (<->) a b
 
+
+
 data A = A1 | A2 | A3
+
+data B = B1
 
 fffn : (Int <-> Int) <-> Double
 
-
+fun : A = B
+fun = [A1]
