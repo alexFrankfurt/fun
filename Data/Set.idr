@@ -22,16 +22,23 @@ elem : Eq a => a -> Set a -> Bool
 elem e Empty = False
 elem e (Cons a (s ** prf)) = e == a || elem e (assert_smaller (Cons a (s ** prf)) s)
 
-dU : (b : Set a) -> (c : Set a)-> Set a
-dU Empty Empty = Empty
-dU Empty c     = c
-dU c Empty     = c
-dU (Cons e (s1 ** prfl)) s2
-  = assert_total $ case choose (c e $ dU s1 s2) of
-      Left prf => dU s1 s2
-      Right prf => Cons e ((dU s1 s2) ** prf)
+mutual
+  U : (b : Set a) -> (c : Set a)-> Set a
+  U Empty Empty = Empty
+  U Empty c     = c
+  U c Empty     = c
+  U (Cons e (s1 ** prfl)) s2
+    = case choose (c e s2) of
+        Left prf => Cons e (U s1 s2 ** ?prf)--lemma_U s2 s1 prf)
+        Right prf => U (assert_smaller (Cons e (s1 ** prfl)) s1) s2
 
-dU_preserves_inhabitants : Eq t => {e : t} -> Elem e s1 -> (s2 : Set t) -> Elem e $ dU s1 s2
+  lemma_U : Eq a => (s1 : Set a) -> (s2 : Set a) -> So (c e s1) -> So (c e $ U s1 s2)
+
+    -- assert_total $ case choose (c e $ U s1 s2) of
+    --   Left prf => U s1 s2
+    --   Right prf => Cons e ((U s1 s2) ** prf)
+
+U_preserves_inhabitants : Eq t => {e : t} -> Elem e s1 -> (s2 : Set t) -> Elem e $ U s1 s2
 
 Foldable Set where
   foldr f a Empty = a
