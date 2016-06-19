@@ -9,12 +9,12 @@ data SBoundedDouble : (a : Double) -> (b : Double) -> Type where
   MkSBD : (d : Double ** So (d > a && d < b)) -> SBoundedDouble a b
 
 singleS : Set Int
-singleS = Single 1
+singleS = Empty
 
 biggerS : Set Int
 biggerS = case choose (c 2 singleS) of
             Left p => singleS
-            Right p => OneMoreE 2 (singleS ** p)
+            Right p => Cons 2 (singleS ** p)
 
 -- TODO: partition property
 data Partition : (a : Type) -> Type where
