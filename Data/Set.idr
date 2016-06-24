@@ -15,6 +15,9 @@ mutual
   c e Empty = False
   c e (Cons a (s ** prf)) = assert_total $ e == a || c e s
 
+c_empty : Eq a => (v : a) -> Data.Set.c v Empty = False
+c_empty v = Refl
+
 data Elem : Eq a => a -> Set a -> Type where
   IsElem : Eq a => {e : a} -> Elem e (Cons e c)
 
@@ -23,8 +26,8 @@ elem e Empty = False
 elem e (Cons a (s ** prf)) = e == a || elem e (assert_smaller (Cons a (s ** prf)) s)
 
 mutual
+  partial
   U : (b : Set a) -> (c : Set a)-> Set a
-  U Empty Empty = Empty
   U Empty c     = c
   U c Empty     = c
   U (Cons e (s1 ** prfl)) s2
@@ -44,3 +47,36 @@ Foldable Set where
   foldr f a Empty = a
   foldr f a (Cons e (s ** prf))
     = f e (foldr f a (assert_smaller (Cons e (s ** prf)) s))
+
+data A = A1 | A2 | A3
+Eq A where
+  A1 == A1 = True
+  A2 == A2 = True
+  A3 == A3 = True
+  _  == _  = False
+
+vl : Set A
+vl = Cons A1 (Empty ** Oh)
+
+vll : Set A
+vll = Cons A2 (vl ** Oh)
+
+vlll : Set A
+vlll = Cons A3 (vll ** Oh)
+
+set : Set A
+set = vlll
+
+data Css : a -> Type where
+  NoCss : Css a
+  MoreCss : a -> Css a -> Css a
+
+typed : Set A -> Type
+typed Empty = A
+typed (Cons v (s ** prf)) = ?rhs
+
+lem : (css : Set A) -> typed css = A
+lem Empty = Refl
+
+lemma : typed Set.set = A
+lemma = ?rhs
