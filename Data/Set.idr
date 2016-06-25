@@ -67,16 +67,21 @@ vlll = Cons A3 (vll ** Oh)
 set : Set A
 set = vlll
 
-data Css : a -> Type where
-  NoCss : Css a
-  MoreCss : a -> Css a -> Css a
+interface Constructors a where
+  css : List a
 
-typed : Set A -> Type
-typed Empty = A
-typed (Cons v (s ** prf)) = ?rhs
+  private prop : a <-> css
 
-lem : (css : Set A) -> typed css = A
-lem Empty = Refl
+-- data Css : a -> Type where
+--   NoCss : Css a
+--   MoreCss : a -> Css a -> Css a
 
-lemma : typed Set.set = A
-lemma = ?rhs
+-- typed : Set A -> Type
+-- typed Empty = A
+-- typed (Cons v (s ** prf)) = ?rhs
+
+-- lem : (css : Set A) -> typed css = A
+-- lem Empty = Refl
+
+-- lemma : typed Set.set = A
+-- lemma = ?rhs
