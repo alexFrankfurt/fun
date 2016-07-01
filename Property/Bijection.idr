@@ -2,19 +2,23 @@ module Property.Bijection
 
 import Dummy
 
-data Inj : a -> b -> Type where
+%default total
+
+-- fer : (f : a -> b)
+
+data Inj : (a -> b) -> Type where
   MkInj : (f : a -> b) ->
-          (x : a) -> (y : a) ->
-          (prf : f x = f y -> x = y) ->
-          Inj a b
+          (req : (x, y : a) ->
+                 (f x = f y -> x = y)) ->
+          Inj f
 
-data Sur : a -> b -> Type where
+data Sur : (a -> b) -> Type where
   MkSur : (f : a -> b) ->
-          (i : b) ->
-          (x ** f x = i) ->
-          Sur a b
+          (req : (i : b) ->
+                 (x ** f x = i)) ->
+          Sur f
 
-data Bij : a -> b -> Type where
-  MkBij : (i : Inj a b) -> (s : Sur a b) -> Bij a b
+data Bij : (a -> b) -> Type where
+  MkBij : (i : Inj f) -> (s : Sur f) -> Bij f
 
-test : List a -> a -> Inj (List a) a
+test : (f : List a -> a) -> Inj f
