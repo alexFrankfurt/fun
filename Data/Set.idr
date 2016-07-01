@@ -1,6 +1,7 @@
 module Data.Set
 
 import Data.So
+import Dummy
 
 %default total
 %access export
@@ -18,8 +19,18 @@ mutual
 c_empty : Eq a => (v : a) -> Data.Set.c v Empty = False
 c_empty v = Refl
 
-data Elem : Eq a => a -> Set a -> Type where
-  IsElem : Eq a => {e : a} -> Elem e (Cons e c)
+using (Eq a)
+  data Elem : a -> Set a -> Type where
+    IsElem : {e : a} -> Elem e (Cons e c)
+    HasElem : {ne : a} -> Elem e s
+                       -> (prf : So $ not $ c ne s)
+                       -> Elem ne (Cons ne (s ** prf))
+
+-- TODO: Uninhabited empty set
+
+using (v:a)
+  Eq a => Uninhabited (Elem v Empty) where
+    uninhabited IsElem impossible
 
 elem : Eq a => a -> Set a -> Bool
 elem e Empty = False
@@ -41,19 +52,13 @@ mutual
     --   Left prf => U s1 s2
     --   Right prf => Cons e ((U s1 s2) ** prf)
 
-U_preserves_inhabitants : Eq t => {e : t} -> Elem e s1 -> (s2 : Set t) -> Elem e $ U s1 s2
+-- U_preserves_inhabitants : Eq t => {e : t} -> Elem e s1 -> (s2 : Set t) -> Elem e $ U s1 s2
 
 Foldable Set where
   foldr f a Empty = a
   foldr f a (Cons e (s ** prf))
-    = f e (foldr f a (assert_smaller (Cons e (s ** prf)) s))
-
-data A = A1 | A2 | A3
-Eq A where
-  A1 == A1 = True
-  A2 == A2 = True
-  A3 == A3 = True
-  _  == _  = False
+      -- assert_smaller for s doesn't work
+    = assert_total $ f e (foldr f a s)
 
 vl : Set A
 vl = Cons A1 (Empty ** Oh)
@@ -67,10 +72,10 @@ vlll = Cons A3 (vll ** Oh)
 set : Set A
 set = vlll
 
-interface Constructors a where
-  css : List a
+-- interface Constructors a where
+--   css : List a
 
-  private prop : a <-> css
+--   private prop : a <-> css
 
 -- data Css : a -> Type where
 --   NoCss : Css a
