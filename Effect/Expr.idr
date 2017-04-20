@@ -18,20 +18,20 @@ Env = List (String, Integer)
 getRnd : Integer -> { [RND] } Eff Integer
 getRnd upper = do val <- rndInt 0 upper
 --                   putStrLn (show val)
-                  return val
+                  pure val
 
 eval : Expr -> { [EXCEPTION String, RND, STDIO, STATE Env] } Eff Integer
 eval (Var x)
    = do vs <- get
         case lookup x vs of
              Nothing => raise ("No such variable " ++ x)
-             Just val => return val
-eval (Val x) = return x
+             Just val => pure val
+eval (Val x) = pure x
 eval (Add l r) = do l' <- eval l
                     r' <- eval r
-                    return (l' + r')
+                    pure (l' + r')
 eval (Random upper) = do val <- getRnd upper
-                         return val
+                         pure val
 
 testExpr : Expr
 testExpr = Add (Add (Var "foo") (Val 42)) (Random 100)

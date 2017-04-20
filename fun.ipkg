@@ -8,32 +8,13 @@ modules
   = Algo.MergeSort
   , Algo.QuickSort
 
-  , Conf.Main
-  , Conf.Test
-  , Conf.Parser.Core
-
-  , Effect.Counter
-  , Effect.EEffects
   , Effect.Expr
-  , Effect.GuessNumber
-  , Effect.NTimes
-  , Effect.Simple
   , Effect.Simplest
-  , Effect.StringRecorder
-
-  , Ent.Concept
-
-  , Ibt.Main
 
   , Interface.Named
 
-  , Parser.Combinator
-
   , Structure.BinaryTree
 
-  , Cast
-  , Exer
-  , Model
   , Printf
   , Syntax
   , Tests
