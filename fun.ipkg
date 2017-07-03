@@ -4,6 +4,8 @@ pkgs
   = effects
   , contrib
 
+opts = "--ibcsubdir out"
+
 modules
   = Algo.MergeSort
   , Algo.QuickSort
