@@ -4,6 +4,8 @@ pkgs
   = effects
   , contrib
 
+opts = "--ibcsubdir out"
+
 modules
   = Algo.MergeSort
   , Algo.QuickSort
@@ -12,38 +14,8 @@ modules
   , Algorithm.BPPOD.Model
   , Algorithm.BPPOD.Property
 
-  , Conf.Main
-  , Conf.Test
-  , Conf.Parser.Core
-
   , Data.Set
-
-  , Effect.Counter
-  , Effect.EEffects
-  , Effect.Expr
-  , Effect.GuessNumber
-  , Effect.NTimes
-  , Effect.Simple
-  , Effect.Simplest
-  , Effect.StringRecorder
-
-  , Ent.Concept
-
-  , Ibt.Main
-
-  , Parser.Combinator
 
   , Structure.BinaryTree
 
-  , Cast
-  , Exer
-  , Model
-  , NamedInstance
   , Printf
-  , Syntax
-  , Tests
-  , Two
-
-executable = conf
-
-main = Conf.Main
