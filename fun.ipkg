@@ -1,40 +1,15 @@
 package fun
 
-pkgs = effects
-     , contrib
+pkgs
+  = effects
+  , contrib
 
-modules = Cast
-	, Exer
-	, Model
-	, Door
-	, Printf
-	, Syntax
-	, Tests
-	, Two
-	, NamedInstance
-	  
-	, Effect.Simplest
-	, Effect.Counter
-	, Effect.Door
-	, Effect.StringRecorder
-	, Effect.GuessNumber
-	, Effect.Simple
-	, Effect.FFile
-	, Effect.EEffects
-	, Effect.Exprc
-	, Effect.NTimes
+opts = "--ibcsubdir out"
 
-	, Ibt.Main
+modules
+  = Algo.MergeSort
+  , Algo.QuickSort
 
-	, Structure.BinaryTree
+  , Structure.BinaryTree
 
-	, Parser.Combinator
-
-	, Ent.Concept
-
-	, Conf.Main
-	, Conf.Parser.Core
-
-executable = conf
-
-main = Conf.Main
+  , Printf

@@ -6,7 +6,7 @@ data Format = FInt Format -- %d
             | FString Format -- %s
             | FOther Char Format -- [a-zA-Z0-9]
             | FEnd
-            
+
 format : List Char -> Format
 format ('%'::'d'::cs) = FInt (format cs)
 format ('%'::'s'::cs) = FString $ format cs
@@ -14,11 +14,11 @@ format (c::cs)        = FOther c (format cs)
 format []             = FEnd
 
 interpFormat : Format -> Type
-interpFormat (FInt f)     = Int -> interpFormat f 
+interpFormat (FInt f)     = Int -> interpFormat f
 interpFormat (FString f)  = String -> interpFormat f
 interpFormat (FOther _ f) = interpFormat f
-interpFormat FEnd         = String  
-      
+interpFormat FEnd         = String
+
 formatString : String -> Format
 formatString s = format (unpack s)
 
@@ -32,4 +32,4 @@ printf : (s : String) -> interpFormat $ formatString s
 printf s =  toFunction (formatString s) ""
 
 res0 : Num a => Maybe a
-res0 = (<+>) (Just 10)  (Just 2) 
+res0 = (<+>) (Just 10)  (Just 2)

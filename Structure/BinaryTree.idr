@@ -1,5 +1,6 @@
 module Structure.BinaryTree
 
+
 import Data.Vect
 import Effects
 import Effect.StdIO
@@ -9,7 +10,7 @@ data BinaryTree : (keyT : Type) -> (dataT : Type) -> Type where
      EmptyTree  : BinaryTree keyT dataT
      Node       : keyT -> dataT -> (BinaryTree keyT dataT)
                   -> (BinaryTree keyT dataT) -> BinaryTree keyT dataT
-                  
+
 Leaf : a -> b -> BinaryTree a b
 Leaf keyv datav = Node keyv datav EmptyTree EmptyTree
 
@@ -21,28 +22,28 @@ notEmptyTree : BinaryTree a b -> Bool
 notEmptyTree EmptyTree = False
 notEmptyTree (Node x y z w) = True
 
-leftMost : (t : BinaryTree a b) 
-           -> {auto ok : notEmptyTree t = True} 
+leftMost : (t : BinaryTree a b)
+           -> {auto ok : notEmptyTree t = True}
            -> (BinaryTree a b -> BinaryTree a b -> BinaryTree a b)
 leftMost (Node x y z w) = case z of
                                EmptyTree => Node x y
                                t @ (Node xl yl zl wl) => leftMost t
-                               
+
 withoutLeftMost : (t : BinaryTree a b)
                   -> BinaryTree a b
-withoutLeftMost EmptyTree = EmptyTree                  
+withoutLeftMost EmptyTree = EmptyTree
 withoutLeftMost (Node x y z w) = case z of
                                       EmptyTree => EmptyTree
                                       t @ (Node xl yl zl wl) => Node x y (withoutLeftMost zl) w
 
 value : BinaryTree Integer Double
-value = Leaf 1 1 
+value = Leaf 1 1
 
 t0 : BinaryTree Integer Double
-t0 = Leaf 68 3 
+t0 = Leaf 68 3
 
 t1 : BinaryTree Integer Double
-t1 = Leaf 54 3 
+t1 = Leaf 54 3
 
 t2 : BinaryTree Integer Double
 t2 = Node 77 3 t0 EmptyTree
@@ -57,7 +58,7 @@ t4 = Node 28 8.18 (Leaf 17 3.3)
 dataValue : BinaryTree Integer Double
 dataValue = Node 50 9.0 t4
                         t3
-                        
+
 
 
 find : Ord a => a -> BinaryTree a b -> Maybe b
@@ -77,7 +78,7 @@ insert dat @ (k, b) (Node x y z w) = if k < x
 mutual
   lesses : Ord a => a -> BinaryTree a b -> BinaryTree a b
   lesses k EmptyTree = EmptyTree
-  lesses k t @ (Node x y lt rt) 
+  lesses k t @ (Node x y lt rt)
     = case k `compare` x of
            EQ => lt
            LT => lesses k lt
@@ -91,7 +92,7 @@ mutual
            LT => Node x y (biggers k lt) rt
            GT => biggers k rt
 
-insertRoot : Ord a => (a, b) 
+insertRoot : Ord a => (a, b)
                    -> BinaryTree a b
                    -> BinaryTree a b
 insertRoot (k, v) EmptyTree          = Leaf k v
@@ -114,7 +115,7 @@ delete x (Node y z w s) =
 rotateLeft : Ord a => a -> BinaryTree a b -> BinaryTree a b
 rotateLeft x EmptyTree = EmptyTree
 rotateLeft x (Node y z w s) with (x == y)
-  | False 
+  | False
     = if x < y
          then Node y z (rotateLeft x w) s
          else case key s of
@@ -137,14 +138,14 @@ weightTree t @ (Node x y lt rt) = Node (x, weight t) y (weightTree lt) (weightTr
 
 getNth : Integer -> BinaryTree (a, Integer) b -> Maybe a
 getNth n EmptyTree = Nothing
-getNth n (Node (k, w) d lt rt) 
+getNth n (Node (k, w) d lt rt)
   = case lt of
-         EmptyTree 
+         EmptyTree
            => case n `compare` 1 of
                    LT => Nothing
                    EQ => Just k
                    GT => getNth (n - 1) rt
-         Node (lk, lw) ld llt lrt 
+         Node (lk, lw) ld llt lrt
            => case n `compare` lw + 1 of
                    EQ => Just k
                    LT => getNth n lt
@@ -163,17 +164,17 @@ times s (S k) = s ++ times s k
 
 -- pprint : Show a => BinaryTree a b -> String
 -- pprint EmptyTree = ""
--- pprint (Node x y z w) 
+-- pprint (Node x y z w)
 --   = --with String (++)
 --       with String (++)
---          (with String (++) 
+--          (with String (++)
 --                 (with String (++) (" " `times` width z) $ show x)
 --                 (" " `times` width w))
 --          "\n"
 
 bracedString : Show a => BinaryTree a b -> String
 bracedString EmptyTree = ""
-bracedString (Node x y z w) 
+bracedString (Node x y z w)
   = with Strings (++)
      (with Strings (++)
       (show x)
@@ -187,8 +188,8 @@ bracedString (Node x y z w)
           "{ "
           $ bracedString w)
         " }")
-      
-  
+
+
 
 toString : Show a => BinaryTree a b -> String
 toString EmptyTree = ""
@@ -198,7 +199,7 @@ testsearch : Integer -> BinaryTree Integer Double -> Double
 testsearch v t = case find v t of
                       Nothing => -1
                       Just a => a
-                      
+
 testinsert : (Integer, Double) -> BinaryTree Integer Double -> BinaryTree Integer Double
 testinsert = insert
 
@@ -220,27 +221,27 @@ testgetnth n t = case getNth n (weightTree t) of
 
 onlyEmpty : List $ BinaryTree a b -> Bool
 onlyEmpty ts = foldl check True ts
-  where 
+  where
     check : Bool -> BinaryTree a b -> Bool
     check False _              = False
     check True  EmptyTree      = True
     check True  (Node _ _ _ _) = False
-    
+
 
 rowPrinter : Show a
-          => List $ BinaryTree a b 
-          -> List $ BinaryTree a b 
+          => List $ BinaryTree a b
+          -> List $ BinaryTree a b
           -> Eff (List $ BinaryTree a b, List $ BinaryTree a b) [STDIO]
-rowPrinter []      (lc::[]) 
+rowPrinter []      (lc::[])
   = case lc of
          EmptyTree => do putStrLn ""
                          pure ([EmptyTree], [EmptyTree, EmptyTree])
-         Node k d l r => 
+         Node k d l r =>
            do putStr $ " " `times` width l
               putStr $ show k
               putStrLn $ " " `times` width r
               pure ([lc], [l, r])
-rowPrinter (p::ps) (c::cs) 
+rowPrinter (p::ps) (c::cs)
   = case p of
          EmptyTree => do (nps, ncs) <- rowPrinter ps cs
                          pure (EmptyTree::EmptyTree::nps, EmptyTree::EmptyTree::ncs)
@@ -256,11 +257,11 @@ rowPrinter (p::ps) (c::cs)
                   putStr $ " " `times` elemWidth
                   (nps, ncs) <- rowPrinter ps cs
                   pure (c::f::nps, l::r::ncs)
-             
 
 
-recPrinter : Show a => 
-    Eff Bool [STDIO, 
+
+recPrinter : Show a =>
+    Eff Bool [STDIO,
              'Prevs ::: STATE (List $ BinaryTree a b),
              'Curs ::: STATE (List $ BinaryTree a b)]
              (\ok => if ok then [STDIO,
@@ -275,7 +276,7 @@ recPrinter = case not $ onlyEmpty !('Curs :- get) of
                               'Prevs :- putM np
                               'Curs :- putM nc
                               recPrinter
-                              
+
 
 
 
@@ -287,15 +288,15 @@ treePrinter r @ (Node k v l r) = do putStr $ " " `times` width l
                                     putStrLn $ " " `times` width r
                                     runInit [(), 'Prevs := [r], 'Curs := [l, r]] recPrinter
                                     pure ()
-                                
-                                
+
+
 
 
 
 
 
 tree : BinaryTree Integer Double
-tree = insert 
+tree = insert
   (10, 8) $ insert (13, 3) $ insert (18, 2) $ insert (23, 1) $ insert (70, 2) $ insert
   (80, 2) $ insert (88, 2) $ insert (99, 2) $ insert (92, 2) $ insert (75, 2) $ insert
   (21, 2) $ insert (12, 2) $ insert (15, 2) $ insert (82, 2) t0
