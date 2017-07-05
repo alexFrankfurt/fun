@@ -1,7 +1,7 @@
 module Algorithm.BPPOD.Model
 
 import Algorithm.BPPOD.Property
-import Data.Set
+import Data.Partition
 
 interface BPPOD
   -- Finite set
@@ -9,8 +9,8 @@ interface BPPOD
 
   -- Lenghts of elements of A,
   -- should be inside (0, 1) interval.
-  l : A -> SBoundedDouble 0 1
+  l : A -> BoundedToOne
 
   -- Partition of A into minimal by number set of parts Aᵢ
   -- such that Σ l(aᵢ) ≤ 1
-  partition : A -> List $ Set A
+  partition : Partition Double
