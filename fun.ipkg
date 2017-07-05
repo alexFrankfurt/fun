@@ -10,17 +10,6 @@ modules
   = Algo.MergeSort
   , Algo.QuickSort
 
-  , Effect.Expr
-  , Effect.Simplest
-
-  , Interface.Named
-
   , Structure.BinaryTree
 
   , Printf
-  , Syntax
-  , Tests
-
-executable = conf
-
-main = Conf.Main

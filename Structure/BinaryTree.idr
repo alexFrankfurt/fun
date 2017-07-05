@@ -1,5 +1,6 @@
 module Structure.BinaryTree
 
+
 import Data.Vect
 import Effects
 import Effect.StdIO
