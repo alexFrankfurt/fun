@@ -1,28 +1,30 @@
 module Data.Partition
 
-import Data.Set
+import Data.SortedSet
+
+
+%access export
+
+
+Eq a => Eq (SortedSet a) where
+  x == y = (with List toList x) == (with List toList y)
+
+-- TODO: Efficient implementation
+disjointProp : Ord a => (List $ SortedSet a) -> Bool
+disjointProp [] = True
+disjointProp (x :: xs)
+  = (intersection x $ foldr union empty xs) == empty && disjointProp xs
+
+
+a : Ord a => a -> a
+a x = x
+
 
 -- I guess it requires bijection between types
 data Partition : (a : Type) -> Type where
-  MkPartition : Set $ Set a -> Partition a
-
--- bijection
-infixl 4 <->
--- injection
-infixl 4 ->-
--- surjection
-infixl 4 -<-
-
-data (<->) : Type -> Type -> Type where
-  Mk : a -> b -> (<->) a b
-
-
-
-data A = A1 | A2 | A3
-
-data B = B1
-
-fffn : (Int <-> Int) <-> Double
-
-fun : A = B
-fun = [A1]
+  MkPartition : Ord a =>
+                (given : SortedSet a)
+             -> (part : List $ SortedSet a)
+             -> (prop : given = foldl union empty part)
+             -> (disjointProp part = True)
+             -> Partition a
