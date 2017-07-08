@@ -12,8 +12,10 @@ modules
 
   , Algorithm.Main
   , Algorithm.BPPOD.Model
+  , Algorithm.BPPOD.NFD
   , Algorithm.BPPOD.Property
 
+  , Data.Partition
   , Data.Set
 
   , Structure.BinaryTree

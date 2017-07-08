@@ -19,8 +19,7 @@ disjointProp (x :: xs)
 a : Ord a => a -> a
 a x = x
 
-
--- I guess it requires bijection between types
+public export
 data Partition : (a : Type) -> Type where
   MkPartition : Ord a =>
                 (given : SortedSet a)
