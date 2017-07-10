@@ -20,10 +20,13 @@ a : Ord a => a -> a
 a x = x
 
 public export
-data Partition : (a : Type) -> Type where
+data Partition : (a : Type)
+              -> (prop : (List $ SortedSet a) -> Type)
+              -> Type where
   MkPartition : Ord a =>
                 (given : SortedSet a)
              -> (part : List $ SortedSet a)
-             -> (prop : given = foldl union empty part)
+             -> (partprf : given = foldl union empty part)
+             -> prop part
              -> (disjointProp part = True)
-             -> Partition a
+             -> Partition a prop
