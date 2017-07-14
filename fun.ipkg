@@ -4,33 +4,11 @@ pkgs
   = effects
   , contrib
 
+opts = "--ibcsubdir out"
+
 modules
   = Algo.MergeSort
   , Algo.QuickSort
-
-  , Conf.Main
-  , Conf.Test
-  , Conf.Parser.Core
-
-  , Effect.Counter
-  , Effect.EEffects
-  , Effect.Expr
-  , Effect.GuessNumber
-  , Effect.NTimes
-  , Effect.Simple
-  , Effect.Simplest
-  , Effect.StringRecorder
-
-  , Ent.Concept
-
-  , Ibt.Main
-
-  , Interface.Common
-  , Interface.Impl1
-  , Interface.Impl2
-  , Interface.TwoImplImport
-
-  , Parser.Combinator
 
   , Structure.BinaryTree
 
@@ -40,15 +18,4 @@ modules
   , TM.Types
   , TM.Utils
 
-  , Cast
-  , Exer
-  , Model
-  , NamedInstance
   , Printf
-  , Syntax
-  , Tests
-  , Two
-
-executable = conf
-
-main = Conf.Main
